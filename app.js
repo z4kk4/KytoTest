@@ -1,33 +1,64 @@
 const sButton = document.getElementById("sButton");
-const oTable = document.getElementById("utputTable");
+tdiv= document.getElementById("outputTable");
 let peopleCount;
-const providedData = [];
+
+const peopleDataV = [];
 
 const emailExp = /\S+@\S+\.\S+/;
 const titleExp = /^\b[mM](r|iss|s|rs)\b/i;
-// const nameExp = /\S+/g; //to be tested more to return 1st and 2nd name
-const nameExpT = /\s\b[a-zA-Z]+ [a-zA-Z]+\b/gi; // name if there's a title
-const nameExp = /\s?\b[a-zA-Z]+ [a-zA-Z]+\b/gi; // name if there's no title still not wokring with m Harry Potter
-//[\s+]?
-//[^]?
-//(?!mr|miss|ms|mrs)+
+const nameExpT = /\s\b[a-zA-Z]+\s[a-zA-Z]+\b\s?/gi; // name if there's a title
+const nameExp = /^[a-zA-Z]+\s[a-zA-Z]+(?=\s|$)/i;  // name if there's no title
+
 const numExp =
-  /\b[\+]?[(]?[0-9]{3,4}[)]?[-\s\.]?[0-9]{3,4}[-\s\.]?[0-9]{3,6}\b/i; //works but needs to be tuned
+  /\b\s?[\+[0-9]{0,3}]?[-\s\.]?[(]?[0-9]{3,4}[)]?[-\s\.]?[0-9]{3,4}[-\s\.]?[0-9]{3,6}\b/i;
+
+
 
 sButton.addEventListener("click", (event) => {
   event.preventDefault();
-  if (document.getElementById("content").value.trim() == '') {
+  const providedData = [];
+  if (document.getElementById("content").value.trim() == "") { //if user tries to enter an empty input an alert will show 
     alert("Please enter correct data");
-    
   } else {
     const content = document.getElementById("content").value.trim();
     peopleCount = content.split(/\r\n|\r|\n/).length;
     peopleData = content.split("\n");
+    const peopleDataV = [];
+    let isInvalid = false;
 
-    // for (let i=0; i<peopleCount; i++){
-    //     providedData.push(peopleData[i].split(' '));
-    // }
-    // console.log(providedData);
+    for (let i = 0; i < peopleCount; i++) { //this loop is valdiate the data (has name and surname), and control duplicates 
+      if (
+        peopleData[i].match(titleExp) != null &&
+        peopleData[i].match(nameExpT) == null
+      ) {
+        isInvalid = true;
+      } else if (
+        peopleData[i].match(titleExp) == null &&
+        peopleData[i].match(nameExp) == null
+      ) {
+        isInvalid = true;
+      } else {
+        if (peopleData[i].match(titleExp)) {
+          if (!providedData.includes(peopleData[i].match(nameExpT)[0])) {
+            providedData.push(peopleData[i].match(nameExpT)[0]);
+            peopleDataV.push(peopleData[i]);
+          }
+        } else {
+          if (!providedData.includes(peopleData[i].match(nameExp)[0])) {
+            providedData.push(peopleData[i].match(nameExp)[0]);
+            peopleDataV.push(peopleData[i]);
+          }
+        }
+      }
+    }
+
+    if (isInvalid) {
+      alert("Some of the data you enterd is invalid and will be ignored"); //if user tries to enter an invalid person data an alert will show
+    }
+    peopleData = peopleDataV; 
+    peopleCount = peopleDataV.length;
+
+   
 
     const table = document.createElement("table");
     for (let i = 0; i < peopleCount; i++) {
@@ -47,20 +78,18 @@ sButton.addEventListener("click", (event) => {
             peopleData[i].match(nameExpT) != null ||
             peopleData[i].match(nameExp) != null
           ) {
-            //cell.innerHTML=peopleData[i].match(nameExpT)[0].trim().split(' ')[0];
+            
             if (peopleData[i].match(titleExp) == null) {
               cell.innerHTML = peopleData[i]
                 .match(nameExp)[0]
                 .trim()
-                .split(" ")[0];//this should recieve all the string but the last one that is supposed to be last name 
+                .split(" ")[0]; 
             } else {
               cell.innerHTML = peopleData[i]
                 .match(nameExpT)[0]
                 .trim()
                 .split(" ")[0];
             }
-          } else {
-            cell.innerHTML = " ";
           }
           row.appendChild(cell);
         }
@@ -73,15 +102,13 @@ sButton.addEventListener("click", (event) => {
               cell.innerHTML = peopleData[i]
                 .match(nameExp)[0]
                 .trim()
-                .split(" ")[1];//this should recieve the last string in the array that is supposed to be last name 
+                .split(" ")[1]; 
             } else {
               cell.innerHTML = peopleData[i]
                 .match(nameExpT)[0]
                 .trim()
                 .split(" ")[1];
             }
-          } else {
-            cell.innerHTML = " ";
           }
           row.appendChild(cell);
         }
@@ -102,11 +129,12 @@ sButton.addEventListener("click", (event) => {
           }
           row.appendChild(cell);
         }
-        // cell.innerHTML=providedData[i][j];
-        // row.appendChild(cell);
+        
       }
       table.appendChild(row);
     }
-    document.body.appendChild(table);
+    // document.getElementById("content").value=''; //uncomment this line to delete the content of the input after each save 
+    tdiv.innerHTML= '';//comment this line to append new tables under each other instead of replacement
+    tdiv.appendChild(table);
   }
 });

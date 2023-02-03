@@ -2,12 +2,11 @@ textarea {
     width: 400px;
     height: 200px;
 }
-input {
-    width: 400px;
-    height: 200px;
-}
+
 table, th, td {
     border: 1px solid black;
     border-collapse: collapse;
+    min-width: 150px; 
+    min-height: 200px;
     
   }
