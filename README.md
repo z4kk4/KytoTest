@@ -7,5 +7,5 @@ The app runs well with example output and the app ensures:
 - All universal phones numbers and codes are accepted
 - In my case i have built the regExp of the names depending on the existance of the titles, even though i believe there's a better approach 
 but it works for the app.
-- the duplicate people names will not be shown, the control was done on the names because they are the only obligatory fields. (duplicate emails and numbers will show normally ).
+- The duplicate people names will not be shown, the control was done on the names because they are the only obligatory fields. (duplicate emails and numbers will show normally ).
 # To run the app simply open the index.html file in the browser, fill the data in the text input area, then click on save to normalize in a table.
