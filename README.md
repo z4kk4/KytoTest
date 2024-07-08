@@ -1,3 +1,6 @@
+## Kyto test notes: solution for a task i recieved for the working student position at kyto 
+![task details](./task.png)
+
 ## Kyto test notes:
 i chose to go with vanilla JS because i simply didnt feel the need to use any libraries or frameworks.
 the only challenge that i found was to find the right RegExps for my string, it took me most of the time.
